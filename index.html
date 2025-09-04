@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gaming Mega Giveaway</title>
+  <meta name="description" content="Win free in‑game rewards (Diamonds, Skins, Coins). Fast, responsive, OGAds‑ready landing page." />
+  <style>
+    /* --- Reset & Base --- */
+    * { box-sizing: border-box; }
+    :root{
+      --bg:#0b0c10; --card:#12141a; --muted:#a5adbf; --accent:#ffd166; --accent-2:#ef476f; --ok:#06d6a0;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    html,body{height:100%}
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,.06), transparent), radial-gradient(800px 400px at 90% 20%, rgba(239,71,111,.08), transparent), var(--bg); color:#fff; }
+    a{ color:inherit; text-decoration:none }
+
+    /* --- Header --- */
+    header{ position:sticky; top:0; z-index:10; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,.2)); border-bottom:1px solid rgba(255,255,255,.06); }
+    .nav{ max-width: 1024px; margin:0 auto; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px }
+    .brand .logo{ width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:linear-gradient(135deg, var(--accent), #ff7a00); color:#000; font-weight:900; box-shadow: var(--shadow) }
+    .pulse{ position:relative }
+    .pulse:after{ content:""; position:absolute; inset:-2px; border-radius:12px; border:2px solid rgba(255,209,102,.35); filter: blur(2px); animation: pulse 2.2s infinite }
+    @keyframes pulse{ 0%{ opacity:1; transform: scale(1)} 70%{ opacity:0; transform: scale(1.15)} 100%{ opacity:0 } }
+
+    /* --- Layout --- */
+    .wrap{ max-width:1024px; margin: 22px auto; padding: 0 16px; display:grid; grid-template-columns: 1.2fr .8fr; gap:18px }
+    @media (max-width: 880px){ .wrap{ grid-template-columns: 1fr; } }
+
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border:1px solid rgba(255,255,255,.09); border-radius:20px; box-shadow: var(--shadow); padding:18px }
+
+    /* --- Hero --- */
+    .hero{ position:relative; overflow:hidden }
+    .hero .banner{ height:220px; border-radius:16px; background: linear-gradient(135deg, #23272f, #14161a); display:grid; place-items:center; margin-bottom:14px; }
+    .badge{ font-size:12px; opacity:.9; color:#000; background: var(--accent); padding:6px 10px; border-radius:999px; display:inline-flex; align-items:center; gap:8px; font-weight:700 }
+    .title{ font-size: clamp(22px, 6vw, 34px); margin:8px 0 6px; line-height:1.15 }
+    .subtitle{ color: var(--muted); margin-bottom:16px }
+
+    /* --- Form --- */
+    .grid{ display:grid; gap:12px }
+    label{ font-size:13px; opacity:.85 }
+    input, select{ width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0f1116; color:#fff; outline:none }
+    input:focus, select:focus{ border-color: var(--accent) }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+    @media (max-width: 560px){ .row{ grid-template-columns: 1fr } }
+
+    .cta{ margin-top:6px; display:flex; align-items:center; gap:10px }
+    .btn{ flex:1; padding:14px 16px; border:0; border-radius:14px; font-weight:800; cursor:pointer; transition:.2s transform; }
+    .btn.primary{ background: linear-gradient(135deg, var(--accent), #ff7a00); color:#000 }
+    .btn.primary:hover{ transform: translateY(-1px) }
+    .btn.ghost{ background: transparent; border:1px dashed rgba(255,255,255,.18); color:#fff }
+
+    .steps{ display:flex; gap:8px; margin:14px 0 0 }
+    .chip{ padding:8px 10px; border-radius:999px; font-size:12px; background:#0e1015; border:1px solid rgba(255,255,255,.08) }
+
+    /* --- Side / Trust --- */
+    .side .meter{ height:10px; border-radius:999px; background:#0e1015; border:1px solid rgba(255,255,255,.08); overflow:hidden }
+    .side .fill{ height:100%; width:36%; background: linear-gradient(90deg, var(--ok), #00c2ff); animation: grow 6s linear infinite }
+    @keyframes grow{ 0%{ width:12% } 50%{ width:82% } 100%{ width:12% } }
+
+    .live{ display:flex; align-items:center; gap:10px; padding:10px; border:1px solid rgba(255,255,255,.08); border-radius:14px; background: #0e1015 }
+    .dot{ width:10px; height:10px; border-radius:50%; background:#ff3b30; box-shadow:0 0 10px #ff3b30; animation: bl 1.2s infinite }
+    @keyframes bl{ 50%{ opacity:.3 } }
+
+    .list{ display:grid; gap:10px; max-height:240px; overflow:auto; padding-right:6px }
+    .item{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0e1015 }
+    .item small{ color:var(--muted) }
+
+    /* --- Toast --- */
+    .toast{ position: fixed; left:50%; transform:translateX(-50%); bottom:16px; background:#0e1015; border:1px solid rgba(255,255,255,.1); padding:10px 14px; border-radius:999px; font-size:14px; display:none }
+
+    /* Dynamic game theme accents */
+    .theme-strip{ height:6px; border-radius:999px; background: linear-gradient(90deg, #6a11cb, #2575fc) }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo pulse">🎮</div>
+        <div>Gaming Mega Giveaway</div>
+      </div>
+      <div style="margin-left:auto; display:flex; gap:10px; align-items:center">
+        <span class="badge">🚀 Limited Slots</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- LEFT: Hero & Form -->
+    <section class="card hero">
+      <div class="theme-strip" id="themeStrip"></div>
+      <div class="banner" id="banner">
+        <div style="text-align:center">
+          <div class="badge" id="gameTag">Top Gaming Rewards</div>
+          <div class="title" id="title">Claim Free Rewards — Diamonds • Skins • Coins</div>
+          <div class="subtitle">Enter your Player ID, choose a reward, and continue to unlock. No purchase required.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="row">
+          <div>
+            <label for="game">Select Game</label>
+            <select id="game">
+              <option value="freefire">Free Fire</option>
+              <option value="pubg">PUBG Mobile</option>
+              <option value="fortnite">Fortnite</option>
+              <option value="roblox">Roblox</option>
+              <option value="codm">Call of Duty: Mobile</option>
+              <option value="mlbb">Mobile Legends: Bang Bang</option>
+            </select>
+          </div>
+          <div>
+            <label for="region">Region</label>
+            <select id="region">
+              <option value="global" selected>Global</option>
+              <option value="mena">MENA</option>
+              <option value="na">North America</option>
+              <option value="sa">South America</option>
+              <option value="eu">Europe</option>
+              <option value="asia">Asia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="player">Player ID / Username</label>
+            <input id="player" type="text" placeholder="e.g. 123456789 / yourname" autocomplete="off" />
+          </div>
+          <div>
+            <label for="reward">Choose Reward</label>
+            <select id="reward"></select>
+          </div>
+        </div>
+
+        <div class="cta">
+          <button class="btn ghost" id="checkBtn">Check Eligibility</button>
+          <button class="btn primary" id="claimBtn">🎁 Claim Reward</button>
+        </div>
+
+        <div class="steps">
+          <div class="chip">1 · Enter ID</div>
+          <div class="chip">2 · Select Reward</div>
+          <div class="chip">3 · Complete Step</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Trust / Activity -->
+    <aside class="card side">
+      <div class="live" style="margin-bottom:12px">
+        <div class="dot"></div>
+        <div><strong id="liveCount">128</strong> users active · <span style="color:var(--ok)">Verified giveaways</span></div>
+      </div>
+
+      <div style="margin:10px 0 14px">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+          <div style="opacity:.85">Daily Claim Capacity</div>
+          <div class="badge">Auto‑Refresh</div>
+        </div>
+        <div class="meter"><div class="fill"></div></div>
+      </div>
+
+      <div class="list" id="feed"></div>
+
+      <div style="margin-top:12px; color:var(--muted); font-size:12px">
+        * For entertainment/marketing purposes only. Not affiliated with Garena, Epic, Tencent, Roblox, Activision, or Moonton.
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // --- Config ---
+    const LOCKER_URL = "https://your-ogads-locker-link.com"; // TODO: replace with your OGAds content locker link
+
+    const THEMES = {
+      freefire:  { tag:"Free Fire",      gradient:["#ff9f1c","#ff3c00"], title:"Free Fire Giveaway — Diamonds & Elite Pass", rewards:["100 Diamonds","500 Diamonds","Elite Pass","Exclusive Skin"] },
+      pubg:      { tag:"PUBG Mobile",     gradient:["#ffc107","#ff8f00"], title:"PUBG Mobile Rewards — UC & Skins", rewards:["60 UC","325 UC","Outfit Crate","Gun Skin"] },
+      fortnite:  { tag:"Fortnite",        gradient:["#00d2ff","#3a7bd5"], title:"Fortnite Rewards — V‑Bucks & Outfits", rewards:["1000 V‑Bucks","2800 V‑Bucks","Epic Outfit","Emote Pack"] },
+      roblox:    { tag:"Roblox",          gradient:["#00e3ae","#00a3ff"], title:"Roblox Rewards — Robux & Items", rewards:["400 Robux","800 Robux","Limited Item","Premium Trial"] },
+      codm:      { tag:"COD: Mobile",      gradient:["#ffe259","#ffa751"], title:"Call of Duty: Mobile — CP & Blueprints", rewards:["80 CP","420 CP","Epic Blueprint","Operator Skin"] },
+      mlbb:      { tag:"MLBB",            gradient:["#8e2de2","#4a00e0"], title:"MLBB Rewards — Diamonds & Skins", rewards:["100 Diamonds","500 Diamonds","Elite Skin","Starlight"] }
+    };
+
+    // --- Elements ---
+    const gameEl   = document.getElementById('game');
+    const rewardEl = document.getElementById('reward');
+    const playerEl = document.getElementById('player');
+    const titleEl  = document.getElementById('title');
+    const tagEl    = document.getElementById('gameTag');
+    const stripEl  = document.getElementById('themeStrip');
+    const bannerEl = document.getElementById('banner');
+    const toastEl  = document.getElementById('toast');
+    const liveEl   = document.getElementById('liveCount');
+    const feedEl   = document.getElementById('feed');
+
+    // --- Helpers ---
+    const rand = (min,max)=> Math.floor(Math.random()*(max-min+1))+min;
+    const sample = arr => arr[Math.floor(Math.random()*arr.length)];
+
+    function setTheme(key){
+      const t = THEMES[key];
+      tagEl.textContent = t.tag + " Giveaway";
+      titleEl.textContent = t.title;
+
+      // Rewards
+      rewardEl.innerHTML = "";
+      t.rewards.forEach(v=>{
+        const o = document.createElement('option');
+        o.value = v; o.textContent = v; rewardEl.appendChild(o);
+      });
+
+      // Accent strip + banner glow
+      const g = `linear-gradient(90deg, ${t.gradient[0]}, ${t.gradient[1]})`;
+      stripEl.style.background = g;
+      bannerEl.style.boxShadow = `0 0 32px ${t.gradient[0]}44`;
+    }
+
+    function showToast(msg){
+      toastEl.textContent = msg; toastEl.style.display = 'block';
+      setTimeout(()=> toastEl.style.display = 'none', 2400);
+    }
+
+    // Simulated live feed
+    const NAMES = ["Ali","Sara","Youssef","Aya","Nora","Adam","Leila","Sam","Mina","Khalid","Omar","Hiba","Rayan","Lina"];    
+    function pushFeed(){
+      const who = sample(NAMES);
+      const t = THEMES[gameEl.value];
+      const rw = sample(t.rewards);
+      const el = document.createElement('div');
+      el.className = 'item';
+      el.innerHTML = `<div><strong>${who}</strong> claimed <em>${rw}</em> · <small>${t.tag}</small></div><small>${rand(1,3)}m ago</small>`;
+      feedEl.prepend(el);
+      const max = 8; while(feedEl.children.length>max){ feedEl.lastChild.remove(); }
+    }
+
+    // --- Interactions ---
+    gameEl.addEventListener('change', ()=> setTheme(gameEl.value));
+
+    document.getElementById('checkBtn').addEventListener('click', ()=>{
+      const id = playerEl.value.trim();
+      if(!id){ showToast('Enter a valid Player ID / Username'); return; }
+      showToast('✓ ID verified — rewards reserved for 10 minutes');
+    });
+
+    document.getElementById('claimBtn').addEventListener('click', ()=>{
+      const id = playerEl.value.trim();
+      if(!id){ showToast('Please enter your Player ID first'); return; }
+      // Minimal fake gating UX
+      showToast('Securing reward…');
+      setTimeout(()=>{ window.location.href = LOCKER_URL; }, 850);
+    });
+
+    // --- Live metrics ---
+    setInterval(()=>{ liveEl.textContent = String(rand(87, 299)); }, 2200);
+    setInterval(pushFeed, 2600);
+
+    // --- Init ---
+    setTheme('freefire');
+    for(let i=0;i<4;i++) pushFeed();
+  </script>
+</body>
+</html>
